@@ -5,7 +5,7 @@
 
 void command_not_found(const std::string& command) 
 {
-  std::cout << command << ": command not found" << std::endl;
+  std::cout << command << ": not found" << std::endl;
 }
 
 int main() 
