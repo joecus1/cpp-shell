@@ -1,6 +1,12 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <algorithm>
+
+void command_not_found(const std::string& command) 
+{
+  std::cout << command << ": command not found" << std::endl;
+}
 
 int main() 
 {
@@ -27,7 +33,8 @@ int main()
       args.push_back(arg);
     }
 
-    if (command =="echo")
+    
+    if (command == "echo")
     {
       for (const auto& arg : args) 
       {
@@ -43,9 +50,21 @@ int main()
         return 0;
       }
     }
+    else if (command == "type")
+    {
+      std::vector<std::string> valid_commands = {"exit", "echo", "type"};
+      if (args.size() > 0 && std::find(valid_commands.begin(), valid_commands.end(), args[0]) != valid_commands.end()) 
+      {
+        std::cout << args[0] << " is a shell builtin" << std::endl;
+      } 
+      else 
+      {
+        command_not_found(args[0]);
+      }
+    }
     else
     {
-      std::cout << input << ": command not found" << std::endl;
+      command_not_found(command);
     }
   }
 }
