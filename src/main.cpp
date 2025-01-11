@@ -36,7 +36,7 @@ int main()
     
     if (command == "echo")
     {
-      for (const auto& arg : args) 
+      for (std::string arg : args) 
       {
         std::cout << arg << " ";
       }
