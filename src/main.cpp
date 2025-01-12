@@ -98,9 +98,6 @@ int main()
       }
       else 
       {
-        for (const auto& pair : path_commands) {
-          std::cout << pair.first << ": " << pair.second << std::endl;
-        }
         command_not_found(args[0]);
       }
     }
@@ -116,6 +113,9 @@ int main()
     }
     else
     {
+      for (const auto& pair : path_commands) {
+        std::cout << pair.first << ": " << pair.second << std::endl;
+      }
       command_not_found(command);
     }
   }
