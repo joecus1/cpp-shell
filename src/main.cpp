@@ -48,6 +48,11 @@ int main()
 
   const std::string path(std::getenv("PATH"));
   std::unordered_map<std::string, std::string> path_commands = get_commands_from_path(path);
+
+    for (const auto& pair : path_commands) {
+      std::cout << pair.first << ": " << pair.second << std::endl;
+    }
+
   
   while (true) 
   {
@@ -110,7 +115,6 @@ int main()
       }
       
       int result = std::system(full_command.c_str());
-
     }
     else
     {
