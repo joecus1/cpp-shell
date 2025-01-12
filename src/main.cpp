@@ -21,9 +21,9 @@ void get_executables_from_dir(
   for (const auto& entry : fs::directory_iterator(dir))
   {
     // std::cout << entry.path() << std::endl;
-    if (commands.find(entry.path().filename()) == commands.end())
+    if (commands.find(entry.path().stem()) == commands.end())
     {
-      commands[entry.path().filename()] = entry.path();
+      commands[entry.path().stem()] = entry.path();
     }
   }
 }
@@ -48,10 +48,6 @@ int main()
 
   const std::string path(std::getenv("PATH"));
   std::unordered_map<std::string, std::string> path_commands = get_commands_from_path(path);
-
-    for (const auto& pair : path_commands) {
-      std::cout << pair.first << ": " << pair.second << std::endl;
-    }
 
   
   while (true) 
