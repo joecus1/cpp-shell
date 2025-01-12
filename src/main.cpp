@@ -21,7 +21,10 @@ void get_executables_from_dir(
   for (const auto& entry : fs::directory_iterator(dir))
   {
     // std::cout << entry.path() << std::endl;
-    commands[entry.path().filename()] = entry.path();
+    if (commands.find(entry.path().filename()) == commands.end())
+    {
+      commands[entry.path().filename()] = entry.path();
+    }
   }
 }
 
