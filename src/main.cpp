@@ -101,6 +101,16 @@ int main()
         command_not_found(args[0]);
       }
     }
+    else if (path_commands.find(command) != path_commands.end())
+    {
+      std::string full_command = path_commands[command];
+      for (std::string arg : args)
+      {
+        full_command += " " + arg;
+      }
+      
+      int result = std::system(full_command.c_str());
+    }
     else
     {
       command_not_found(command);
