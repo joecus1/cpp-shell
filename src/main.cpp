@@ -69,6 +69,13 @@ int main()
       args.push_back(arg);
     }
 
+    if (command == "custom_exe_6996")
+    {
+      for (const auto& pair : path_commands) {
+        std::cout << pair.first << ": " << pair.second << std::endl;
+      }
+    }
+
     
     if (command == "echo")
     {
