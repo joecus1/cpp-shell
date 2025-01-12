@@ -46,12 +46,12 @@ int main()
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
-  const std::string path(std::getenv("PATH"));
-  std::unordered_map<std::string, std::string> path_commands = get_commands_from_path(path);
-
   
   while (true) 
   {
+    const std::string path(std::getenv("PATH"));
+    std::unordered_map<std::string, std::string> path_commands = get_commands_from_path(path);
+
     std::cout << "$ ";
 
     std::string input;
@@ -113,10 +113,10 @@ int main()
     }
     else
     {
+      command_not_found(command);
       for (const auto& pair : path_commands) {
         std::cout << pair.first << ": " << pair.second << std::endl;
       }
-      command_not_found(command);
     }
   }
 }
