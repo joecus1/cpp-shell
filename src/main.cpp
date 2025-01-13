@@ -49,9 +49,6 @@ int main()
   
   while (true) 
   {
-    const std::string path(std::getenv("PATH"));
-    std::unordered_map<std::string, std::string> path_commands = get_commands_from_path(path);
-
     std::cout << "$ ";
 
     std::string input;
@@ -61,6 +58,9 @@ int main()
     std::istringstream iss(input);
     std::string command;
     iss >> command;
+
+    std::string path(std::getenv("PATH"));
+    std::unordered_map<std::string, std::string> path_commands = get_commands_from_path(path);
 
     std::string arg;
     std::vector<std::string> args;
