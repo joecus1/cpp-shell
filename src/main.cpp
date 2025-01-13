@@ -108,15 +108,14 @@ int main()
       {
         full_command += " " + arg;
       }
+
+      const char *command_ptr = full_command.c_str();
       
-      int result = std::system(full_command.c_str());
+      int result = std::system(command_ptr);
     }
     else
     {
       command_not_found(command);
-      for (const auto& pair : path_commands) {
-        std::cout << pair.first << ": " << pair.second << std::endl;
-      }
     }
   }
 }
