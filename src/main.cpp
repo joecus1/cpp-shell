@@ -103,15 +103,13 @@ int main()
     }
     else if (path_commands.find(command) != path_commands.end())
     {
-      std::string full_command = path_commands[command];
+      std::string full_command = "exec " + path_commands[command];
       for (std::string arg : args)
       {
         full_command += " " + arg;
       }
-
-      const char *command_ptr = full_command.c_str();
       
-      int result = std::system(command_ptr);
+      int result = std::system(full_command.c_str());
     }
     else
     {
