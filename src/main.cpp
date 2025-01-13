@@ -103,7 +103,7 @@ int main()
     }
     else if (path_commands.find(command) != path_commands.end())
     {
-      std::string full_command = "exec " + path_commands[command];
+      std::string full_command = "exec " + command;
       for (std::string arg : args)
       {
         full_command += " " + arg;
