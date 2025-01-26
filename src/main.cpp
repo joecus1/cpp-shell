@@ -87,7 +87,7 @@ int main()
     }
     else if (command == "type")
     {
-      std::vector<std::string> builtins = {"exit", "echo", "type"};
+      std::vector<std::string> builtins = {"exit", "echo", "type", "pwd"};
       if (args.size() > 0 && std::find(builtins.begin(), builtins.end(), args[0]) != builtins.end()) 
       {
         std::cout << args[0] << " is a shell builtin" << std::endl;
