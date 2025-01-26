@@ -87,7 +87,7 @@ int main()
     }
     else if (command == "type")
     {
-      std::vector<std::string> builtins = {"exit", "echo", "type", "pwd"};
+      std::vector<std::string> builtins = {"exit", "echo", "type", "pwd", "cd"};
       if (args.size() > 0 && std::find(builtins.begin(), builtins.end(), args[0]) != builtins.end()) 
       {
         std::cout << args[0] << " is a shell builtin" << std::endl;
@@ -104,6 +104,17 @@ int main()
     else if (command == "pwd")
     {
       std::cout << fs::current_path().string() << std::endl;
+    }
+    else if (command == "cd")
+    {
+      if (fs::exists(args[0]))
+      {
+        fs::current_path(args[0]);
+      }
+      else
+      {
+        std::cout << "cd: " << args[0] << ": No such file or directory" << std::endl;
+      }
     }
     else if (path_commands.find(command) != path_commands.end())
     {
