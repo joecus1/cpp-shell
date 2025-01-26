@@ -101,6 +101,10 @@ int main()
         command_not_found(args[0]);
       }
     }
+    else if (command == "pwd")
+    {
+      std::cout << fs::current_path().string() << std::endl;
+    }
     else if (path_commands.find(command) != path_commands.end())
     {
       std::string full_command = "exec " + command;
