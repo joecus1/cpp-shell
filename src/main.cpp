@@ -59,6 +59,8 @@ int main()
     std::string command;
     iss >> command;
 
+    std::string home(std::getenv("HOME"));
+
     std::string path(std::getenv("PATH"));
     std::unordered_map<std::string, std::string> path_commands = get_commands_from_path(path);
 
@@ -107,7 +109,11 @@ int main()
     }
     else if (command == "cd")
     {
-      if (fs::exists(args[0]))
+      if (args[0] == "~")
+      {
+        fs::current_path(home);
+      }
+      else if (fs::exists(args[0]))
       {
         fs::current_path(args[0]);
       }
