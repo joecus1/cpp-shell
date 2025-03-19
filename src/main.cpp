@@ -5,39 +5,13 @@
 #include <cstdlib>
 #include <filesystem>
 #include <unordered_map>
+#include "Commands.hpp"
 
 namespace fs = std::filesystem;
 
 void command_not_found(const std::string& command) 
 {
   std::cout << command << ": not found" << std::endl;
-}
-
-void get_executables_from_dir(
-  const std::string& dir, 
-  std::unordered_map<std::string, std::string>& commands
-)
-{
-  for (const auto& entry : fs::directory_iterator(dir))
-  {
-    // std::cout << entry.path() << std::endl;
-    if (commands.find(entry.path().stem()) == commands.end())
-    {
-      commands[entry.path().stem()] = entry.path();
-    }
-  }
-}
-
-std::unordered_map<std::string, std::string> get_commands_from_path(const std::string& path)
-{
-  std::istringstream iss(path);
-  std::string dir;
-  std::unordered_map<std::string, std::string> commands;
-  while (std::getline(iss, dir, ':'))
-  {
-    get_executables_from_dir(dir, commands);
-  }
-  return commands;
 }
 
 int main() 
@@ -54,87 +28,65 @@ int main()
     std::string input;
     std::getline(std::cin, input);
 
-    // Split input by spaces
-    std::istringstream iss(input);
-    std::string command;
-    iss >> command;
+    Command command = parse_input(input);
 
     std::string home(std::getenv("HOME"));
-
     std::string path(std::getenv("PATH"));
-    std::unordered_map<std::string, std::string> path_commands = get_commands_from_path(path);
 
-    std::string arg;
-    std::vector<std::string> args;
-    while (iss >> arg) 
-    {
-      args.push_back(arg);
-    }
+    get_commands_from_path(path);
 
-    if (command == "echo")
+    switch (command.type)
     {
-      for (std::string arg : args) 
+    case COMMAND_ECHO:
+      for (std::string arg : command.args) 
       {
         std::cout << arg << " ";
       }
       std::cout << std::endl;
-      continue;
-    }
-    else if (command == "exit") 
-    {
-      if (args.size() > 0 && args[0] == "0") 
+      break;
+    case COMMAND_EXIT:
+      if (command.args.size() == 1 && command.args[0] == "0") 
       {
         return 0;
       }
-    }
-    else if (command == "type")
-    {
-      std::vector<std::string> builtins = {"exit", "echo", "type", "pwd", "cd"};
-      if (args.size() > 0 && std::find(builtins.begin(), builtins.end(), args[0]) != builtins.end()) 
+      break;
+    case COMMAND_TYPE:
+      if (builtIn.find(command.args[0]) != builtIn.end()) 
       {
-        std::cout << args[0] << " is a shell builtin" << std::endl;
+        std::cout << command.args[0] << " is a shell builtin" << std::endl;
       } 
-      else if(path_commands.find(args[0]) != path_commands.end())
+      else if(pathCommand.find(command.args[0]) != pathCommand.end())
       {
-        std::cout << args[0] << " is " << path_commands[args[0]] << std::endl;
+        std::cout << command.args[0] << " is " << pathCommand.at(command.args[0]) << std::endl;
       }
       else 
       {
-        command_not_found(args[0]);
+        command_not_found(command.args[0]);
       }
-    }
-    else if (command == "pwd")
-    {
+      break;
+    case COMMAND_PWD:
       std::cout << fs::current_path().string() << std::endl;
-    }
-    else if (command == "cd")
-    {
-      if (args[0] == "~")
+      break;
+    case COMMAND_CD:
+      if (command.args[0] == "~")
       {
         fs::current_path(home);
       }
-      else if (fs::exists(args[0]))
+      else if (fs::exists(command.args[0]))
       {
-        fs::current_path(args[0]);
+        fs::current_path(command.args[0]);
       }
       else
       {
-        std::cout << "cd: " << args[0] << ": No such file or directory" << std::endl;
+        std::cout << "cd: " << command.args[0] << ": No such file or directory" << std::endl;
       }
-    }
-    else if (path_commands.find(command) != path_commands.end())
-    {
-      std::string full_command = "exec " + command;
-      for (std::string arg : args)
-      {
-        full_command += " " + arg;
-      }
-      
-      int result = std::system(full_command.c_str());
-    }
-    else
-    {
-      command_not_found(command);
+      break;
+    case COMMAND_PATH:
+      std::system(input.c_str());
+      break;
+    default:
+      std::cout << "Issue parsing command" << std::endl;
+      break;
     }
   }
 }
